@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <form @submit.prevent="register" class="p-3 bg-slate-100 w-1/2 m-auto rounded-lg">
+            <p>Name:</p>
+            <input type="text" name="name" id="" v-model="form.name">
+            <p>Email:</p>
+            <input type="email" name="email" id="" v-model="form.email">
+            <p>Password:</p>
+            <input type="password" name="password" id="" v-model="form.password">
+            <p>Password Confirmation:</p>
+            <input type="password" name="passwordConfirm" id="" v-model="form.password_confirmation">
+            <button class="mt-2 p-2 block flex items-center text-white bg-sky-600 hover:bg-sky-800 rounded-lg disabled:bg-sky-200" :disabled="disabled">Submit</button>
+        </form>
+        {{ errors }}
+    </div>
+</body>
+
+</html>
+<script>
+    const app = Vue.createApp({
+        setup() {
+            
+            const form = Vue.ref({
+                email: '',
+                name: '',
+                password: '',
+                password_confirmation: ''
+            })
+
+            const errors = Vue.computed(() => {
+                const { email, name, password, password_confirmation } = form.value
+                const noneEmpty = email && name && password && password_confirmation && true
+                const passwordMatch = password === password_confirmation
+                const emailValid = email.includes('@')
+
+                return {
+                    noneEmpty,
+                    passwordMatch,
+                    emailValid
+                }
+            })
+
+            const disabled = Vue.computed(() => {
+                return Object.values(errors.value).some(error => !error)
+            })
+
+            async function register() {
+                fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(form.value)
+                })
+                .then(res => {res.ok ? window.location.href = '/login.html' : console.log(res)})
+                .catch(err => console.log(err))
+            }
+
+            return {
+                form,
+                errors,
+                disabled,
+                register
+            }
+        }
+    })
+    app.mount('#app')
+</script>
