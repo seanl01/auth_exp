@@ -15,8 +15,9 @@ const protectRoute = (req, res, next) => {
     const token = req.cookies?.token;
     if (token) {
         try {
-            const { sub } = jwt.verify(token, process.env.JWT_SECRET);
+            const { sub, aud } = jwt.verify(token, process.env.JWT_SECRET);
             req.id = sub;
+            req.rol = aud;
             next()
         }
         catch (e) {

@@ -57,13 +57,13 @@ api.post("/login", async (req, res) => {
 
 const authUser = async ({ email, password }) => {
     // returns authenticated user or null
-    const res = await sql`SELECT id, name, password = crypt(${password}, password) as match FROM users WHERE email = ${email}`;
+    const res = await sql`SELECT id, name, role, password = crypt(${password}, password) as match FROM users WHERE email = ${email}`;
     return res.count === 0 ? null : res[0];
 }
 
 // Takes in a user object and sends a cookie with jwt token
-const loginUser = async (res, { id, email, name }) => {
-    const token = jwt.sign({ sub: id, email, name }, process.env.JWT_SECRET, { expiresIn: "1h" });
+const loginUser = async (res, { id, role, email, name }) => {
+    const token = jwt.sign({ sub: id, aud: role, email, name }, process.env.JWT_SECRET, { expiresIn: "1h" });
     res.cookie("token", token, { httpOnly: true });
     res.status(200).send({message: "Logged in successfully"});
 }
@@ -72,10 +72,12 @@ const handleUserDoesNotExist = (res) => {
     res.status(401).send({ message: "User Does not exist" })
 }
 
-api.get("/show-info", async (req, res) => {
+api.get("/profile", async (req, res) => {
     const { id } = req;
     const user = await sql`SELECT id, name, email, role FROM users WHERE id = ${id}`;
     res.send(user[0]);
 })
+
+
 
 export default api;
