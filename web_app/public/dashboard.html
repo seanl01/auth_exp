@@ -1,49 +1,48 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/vue@next"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="output.css">
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="output.css" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="app">
-        <h1>Dashboard</h1>
-        <p>{{data}}</p>
-        <p>{{message}}</p>
+      <h1>Dashboard</h1>
+      <p>{{data}}</p>
+      <p>{{message}}</p>
     </div>
-</body>
-
+  </body>
 </html>
 <script>
-    const app = Vue.createApp({
-        setup() {
-            const data = Vue.ref([]);
-            const message = Vue.ref("");
+  const app = Vue.createApp({
+    setup() {
+      const data = Vue.ref([]);
+      const message = Vue.ref("");
 
-            Vue.onMounted(() => {
-                fetch("/api/auth").then(res => {
-                    if (!res.ok) {
-                        window.location.href = "/login.html"
-                    }
-                })
-                fetch("/api/profile")
-                .then(res => res.json())
-                .then(info => {
-                    data.value = info;
-                })
-            })
+      Vue.onMounted(() => {
+        fetch("/api/auth").then((res) => {
+          if (!res.ok) {
+            window.location.href = "/login.html";
+          }
+        });
+        fetch("/api/profile")
+          .then((res) => res.json())
+          .then((info) => {
+            data.value = info;
+          });
+      });
 
-            return {
-                data,
-                message
-            }
-        }
-    })
-    app.mount('#app')
+      return {
+        data,
+        message,
+      };
+    },
+  });
+  app.mount("#app");
 </script>

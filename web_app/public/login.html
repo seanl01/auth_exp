@@ -1,54 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/vue@next"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <!-- <link rel="stylesheet" href="styles.css"> -->
-    <link rel="stylesheet" href="output.css">
+    <link rel="stylesheet" href="output.css" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="app">
-        <form @submit.prevent="login" class="p-3 bg-slate-100 w-1/2 m-auto rounded-lg">
-            <h2 class="text-2xl font-semibold mb-2">Login</h2>
-            <p>Email</p>
-            <input type="text" name="email" id="" v-model="form.email">
-            <p>Password</p>
-            <input type="text" name="password" id="" v-model="form.password">
-            <button class="mt-2 p-2 block flex items-center text-white bg-sky-600 hover:bg-sky-800 rounded-lg">Submit</button>
-        </form>
+      <form
+        @submit.prevent="login"
+        class="p-3 bg-slate-100 w-1/2 m-auto rounded-lg"
+      >
+        <h2 class="text-2xl font-semibold mb-2">Login</h2>
+        <p>Email</p>
+        <input type="text" name="email" id="" v-model="form.email" />
+        <p>Password</p>
+        <input type="text" name="password" id="" v-model="form.password" />
+        <button
+          class="mt-2 p-2 block flex items-center text-white bg-sky-600 hover:bg-sky-800 rounded-lg"
+        >
+          Submit
+        </button>
+      </form>
     </div>
-</body>
-
+  </body>
 </html>
 <script>
-    const app = Vue.createApp({
-        setup() {
-            const form = Vue.ref({
-                email: '',
-                password: ''
-            })
-            async function login() {
-                fetch('/api/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(form.value)
-                })
-                .then(res => {res.ok ? window.location.href = '/dashboard.html' : console.log(res)})
-                .catch(err => console.log(err))
-            }
+  const app = Vue.createApp({
+    setup() {
+      const form = Vue.ref({
+        email: "",
+        password: "",
+      });
+      async function login() {
+        fetch("/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(form.value),
+        })
+          .then((res) => {
+            res.ok
+              ? (window.location.href = "/dashboard.html")
+              : console.log(res);
+          })
+          .catch((err) => console.log(err));
+      }
 
-            return {
-                form,
-                login
-            }
-        }
-    })
-    app.mount('#app')
+      return {
+        form,
+        login,
+      };
+    },
+  });
+  app.mount("#app");
 </script>

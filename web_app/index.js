@@ -31,8 +31,9 @@ const protectRoute = (req, res, next) => {
 }
 
 const excludeLoginAndRegister = (req, res, next) => {
-    console.log(req.path);
-    if (req.path === "/login.html" || req.path === "/register.html" || req.path === "/api/login") {
+    const paths = new Set(["/login.html", "/register.html", "/api/login", "/api/register"])
+    if (paths.has(req.path)) {
+        // console.log("Skipping protectRoute");
         next();
     }
     else {
